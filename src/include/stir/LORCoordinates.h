@@ -9,6 +9,7 @@
   \brief defines various classes for specifying a line in 3 dimensions
   \warning This is all preliminary and likely to change.
   \author Kris Thielemans
+  \author Parisa Khateri
 
 
 */
@@ -29,6 +30,22 @@
 
     See STIR/LICENSE.txt for details
 */
+/*
+	Copyright 2018 ETH Zurich, Institute for Particle Physics and Astrophysics
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
+
 
 #include "stir/CartesianCoordinate3D.h"
 #include "stir/Succeeded.h"
@@ -308,6 +325,11 @@ class LORAs2Points : public LOR<coordT>
     Succeeded
     get_intersections_with_cylinder(LORAs2Points<coordT>&,
 				    const double radius) const;
+ 
+ //! Calculate intersections with block. Used in: ProjDataInfoBlocksOnCylindrical::get_LOR
+  Succeeded
+  change_representation_for_block(LORInAxialAndNoArcCorrSinogramCoordinates<coordT>&,
+          const double radius) const;
 
  private:
   CartesianCoordinate3D<coordT> _p1;

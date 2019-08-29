@@ -7,7 +7,7 @@
   \brief Implementations for LORCoordinates.h
   \warning This is all preliminary and likely to change.
   \author Kris Thielemans
-
+  \author Parisa Khateri
 
 */
 /*
@@ -26,6 +26,22 @@
 
     See STIR/LICENSE.txt for details
 */
+/*
+	Copyright 2018 ETH Zurich, Institute for Particle Physics and Astrophysics
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
+
 
 #include "stir/modulo.h"
 #include "stir/Succeeded.h"
@@ -441,6 +457,40 @@ get_intersections_with_cylinder(LORAs2Points<coordT>& lor,
                                 const double radius) const
 {
   return find_LOR_intersections_with_cylinder(lor, *this, radius);
+}
+
+template <class coordT>
+Succeeded
+LORAs2Points<coordT>::
+change_representation_for_block(LORInAxialAndNoArcCorrSinogramCoordinates<coordT>& lor,
+                              const double radius) const
+{
+  const CartesianCoordinate3D<coordT>& c1 = this->p1();
+  const CartesianCoordinate3D<coordT>& c2 = this->p2();
+
+  //To check if LOR is inside the detector
+  const CartesianCoordinate3D<coordT> d = c2 - c1;
+  const double dxy2 = (square(d.x())+square(d.y()));
+  const double argsqrt=
+      (square(radius)*dxy2-square(d.x()*c1.y()-d.y()*c1.x()));
+
+  LORInCylinderCoordinates<coordT> cyl_coords;
+  cyl_coords.reset(static_cast<float>(radius));
+
+  cyl_coords.p1().psi() =
+    from_min_pi_plus_pi_to_0_2pi(static_cast<coordT>(atan2(c1.x(),-c1.y())));
+  cyl_coords.p2().psi() =
+    from_min_pi_plus_pi_to_0_2pi(static_cast<coordT>(atan2(c2.x(),-c2.y())));
+  cyl_coords.p1().z() =
+    static_cast<coordT>(c1.z());
+  cyl_coords.p2().z() =
+    static_cast<coordT>(c2.z());
+  lor = cyl_coords;
+
+  if (argsqrt<=0)
+    return Succeeded::no; // LOR is outside detector radius
+  else
+    return Succeeded::yes;
 }
 
 #define DEFINE_LOR_GET_FUNCTIONS(TYPE)                                       \

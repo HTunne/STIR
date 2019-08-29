@@ -3,74 +3,74 @@ set(dir buildblock)
 set (dir_LIB_SOURCES ${dir}_LIB_SOURCES)
 
 set(${dir_LIB_SOURCES}
-  Array  
-  IndexRange 
+  Array
+  IndexRange
   PatientPosition
   ExamInfo
   ExamData
-  ProjData 
-  ProjDataInfo 
-  ProjDataInfoCylindrical 
-  ProjDataInfoCylindricalArcCorr 
-  ProjDataInfoCylindricalNoArcCorr 
-  ArcCorrection 
-  ProjDataFromStream  
+  ProjData
+  ProjDataInfo
+  ProjDataInfoCylindrical
+  ProjDataInfoCylindricalArcCorr
+  ProjDataInfoCylindricalNoArcCorr
+  ArcCorrection
+  ProjDataFromStream
   ProjDataGEAdvance
-  ProjDataInMemory 
-  ProjDataInterfile 
-  Scanner 
-  SegmentBySinogram 
-  Segment 
-  SegmentByView 
+  ProjDataInMemory
+  ProjDataInterfile
+  Scanner
+  SegmentBySinogram
+  Segment
+  SegmentByView
   Viewgram
   Verbosity
-  Sinogram 
-  RelatedViewgrams 
-  scale_sinograms 
-  interpolate_projdata 
-  extend_projdata 
-  DiscretisedDensity 
-  VoxelsOnCartesianGrid 
+  Sinogram
+  RelatedViewgrams
+  scale_sinograms
+  interpolate_projdata
+  extend_projdata
+  DiscretisedDensity
+  VoxelsOnCartesianGrid
   ParseDiscretisedDensityParameters
-  utilities 
-  interfile_keyword_functions 
-  zoom 
-  NumericType ByteOrder 
-  KeyParser  
-  recon_array_functions 
-  linear_regression overlap_interpolate 
+  utilities
+  interfile_keyword_functions
+  zoom
+  NumericType ByteOrder
+  KeyParser
+  recon_array_functions
+  linear_regression overlap_interpolate
   error warning
   TextWriter
-  DataSymmetriesForViewSegmentNumbers 
-  TimeFrameDefinitions 
-  ParsingObject 
-	ArrayFilter1DUsingConvolutionSymmetricKernel 
-	ArrayFilterUsingRealDFTWithPadding 
-	SeparableArrayFunctionObject 
-	SeparableMetzArrayFilter 
+  DataSymmetriesForViewSegmentNumbers
+  TimeFrameDefinitions
+  ParsingObject
+	ArrayFilter1DUsingConvolutionSymmetricKernel
+	ArrayFilterUsingRealDFTWithPadding
+	SeparableArrayFunctionObject
+	SeparableMetzArrayFilter
         SeparableGaussianImageFilter
         SeparableGaussianArrayFilter
-	MedianArrayFilter3D 
-	MedianImageFilter3D 
-	MinimalArrayFilter3D 
-	MinimalImageFilter3D 
-	SeparableCartesianMetzImageFilter 
-	TruncateToCylindricalFOVImageProcessor 
-	ThresholdMinToSmallPositiveValueDataProcessor 
-	ChainedDataProcessor 
-	ArrayFilter1DUsingConvolution 
-	SeparableConvolutionImageFilter 
-	NonseparableConvolutionUsingRealDFTImageFilter 
-	SSRB 
-	inverse_SSRB 
-	centre_of_gravity 
-	DynamicDiscretisedDensity 
-	DynamicProjData 
-	MultipleProjData 
+	MedianArrayFilter3D
+	MedianImageFilter3D
+	MinimalArrayFilter3D
+	MinimalImageFilter3D
+	SeparableCartesianMetzImageFilter
+	TruncateToCylindricalFOVImageProcessor
+	ThresholdMinToSmallPositiveValueDataProcessor
+	ChainedDataProcessor
+	ArrayFilter1DUsingConvolution
+	SeparableConvolutionImageFilter
+	NonseparableConvolutionUsingRealDFTImageFilter
+	SSRB
+	inverse_SSRB
+	centre_of_gravity
+	DynamicDiscretisedDensity
+	DynamicProjData
+	MultipleProjData
   MultipleDataSetHeader
-	GatedProjData 
-	ArrayFilter2DUsingConvolution 
-	ArrayFilter3DUsingConvolution 
+	GatedProjData
+	ArrayFilter2DUsingConvolution
+	ArrayFilter3DUsingConvolution
 	find_fwhm_in_image
         GatedDiscretisedDensity
         MaximalArrayFilter3D
@@ -81,6 +81,9 @@ set(${dir_LIB_SOURCES}
         GeneralisedPoissonNoiseGenerator
         FilePath
         date_time_functions
+        GeometryBlocksOnCylindrical
+        ProjDataInfoBlocksOnCylindrical
+        ProjDataInfoBlocksOnCylindricalNoArcCorr
 )
 if (HAVE_HDF5)
  list(APPEND ${dir_LIB_SOURCES}
