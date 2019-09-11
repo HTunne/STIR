@@ -643,7 +643,7 @@ InterfilePDFSHeader::InterfilePDFSHeader()
   scanner_orientation = "X";
   add_key("Scanner orientation (X or Y)", &scanner_orientation);
 
-  scanner_geometry = "None";
+  scanner_geometry = "Cylindrical";
   add_key("Scanner geometry (BlocksOnCylindrical/Cylindrical)", &scanner_geometry);
 
   axial_distance_between_crystals_in_cm = -1;
