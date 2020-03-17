@@ -31,7 +31,7 @@
   <tt>--ACF</tt>  calculates the attenuation correction factors, <tt>--AF</tt>  calculates
   the attenuation factor (i.e. the inverse of the ACFs).
 
-  The option <tt>--PMRT</tt> forces forward projection using the Probability Matrix Using Ray Tracing 
+  The option <tt>--PMRT</tt> forces forward projection using the Probability Matrix Using Ray Tracing
   (stir::ProjMatrixByBinUsingRayTracing).
 
   The attenuation_image has to contain an estimate of the mu-map for the image. It will be used
@@ -72,11 +72,11 @@ START_NAMESPACE_STIR
 
 static void print_usage_and_exit()
 {
-    std::cerr<<"\nUsage: calculate_attenuation_coefficients [--PMRT --NOPMRT]  --AF|--ACF <output filename > <input image file name> <template_proj_data>\n"
+    std::cerr<<"\nUsage: calculate_attenuation_coefficients [--PMRT --NOPMRT]  --AF|--ACF <output filename > <input image file name> <template_proj_data> [forwardprojector-parfile]\n"
 	     <<"\t--ACF  calculates the attenuation correction factors\n"
 	     <<"\t--AF  calculates the attenuation factor (i.e. the inverse of the ACFs)\n"
-             <<"\t--PMRT uses the Ray Tracing Projection Matrix (default)\n"
-             <<"\t--NOPMRT uses the (old) Ray Tracing forward projector\n"
+             <<"\t--PMRT uses the Ray Tracing Projection Matrix (default) (ignored if parfile provided)\n"
+             <<"\t--NOPMRT uses the (old) Ray Tracing forward projector (ignored if parfile provided)\n"
              <<"The input image has to give the attenuation (or mu) values at 511 keV, and be in units of cm^-1.\n";
     exit(EXIT_FAILURE);
 }
@@ -85,7 +85,7 @@ END_NAMESPACE_STIR
 
 USING_NAMESPACE_STIR
 
-int 
+int
 main (int argc, char * argv[])
 {
 
@@ -94,10 +94,10 @@ main (int argc, char * argv[])
 
   if (argc>1 && strcmp(argv[1],"--PMRT")==0)
     {
-      use_PMRT=true; 
+      use_PMRT=true;
       --argc; ++argv;
     }
-  if (argc!=5 )
+  if (argc!=5 || argc!=6)
     print_usage_and_exit();
 
   bool doACF=true;// initialise to avoid compiler warning
@@ -109,30 +109,39 @@ main (int argc, char * argv[])
     print_usage_and_exit();
 
   ++argv; --argc;
-  
+
+
   const std::string atten_image_filename(argv[2]);
   // read it to get ExamInfo
   shared_ptr <DiscretisedDensity<3,float> >
     atten_image_sptr(read_from_file<DiscretisedDensity<3,float> >(atten_image_filename));
 
-  shared_ptr<ProjData> template_proj_data_ptr = 
+  shared_ptr<ProjData> template_proj_data_ptr =
     ProjData::read_from_file(argv[3]);
 
   shared_ptr<ForwardProjectorByBin> forw_projector_ptr;
-  if (use_PMRT)
-    {
+  if (argc>=5)
+  {
+      KeyParser parser;
+      parser.add_start_key("Forward Projector parameters");
+      parser.add_parsing_key("type", &forw_projector_sptr);
+      parser.add_stop_key("END");
+      parser.parse(argv[5]);
+  }
+  else if (use_PMRT)
+  {
       shared_ptr<ProjMatrixByBin> PM(new  ProjMatrixByBinUsingRayTracing());
-      forw_projector_ptr.reset(new ForwardProjectorByBinUsingProjMatrixByBin(PM)); 
-    }
+      forw_projector_ptr.reset(new ForwardProjectorByBinUsingProjMatrixByBin(PM));
+  }
   else
   {
     forw_projector_ptr.reset(new ForwardProjectorByBinUsingRayTracing());
   }
 
-  cerr << "\n\nForward projector used:\n" << forw_projector_ptr->parameter_info();  
+  cerr << "\n\nForward projector used:\n" << forw_projector_ptr->parameter_info();
 
   const std::string output_file_name = argv[1];
-  shared_ptr<ProjData> 
+  shared_ptr<ProjData>
     out_proj_data_ptr(
 		      new ProjDataInterfile(template_proj_data_ptr->get_exam_info_sptr(),// TODO this should say it's an ACF File
 					    template_proj_data_ptr->get_proj_data_info_sptr()->create_shared_clone(),
@@ -146,7 +155,7 @@ main (int argc, char * argv[])
   shared_ptr<BinNormalisation> normalisation_ptr
 	(new BinNormalisationFromAttenuationImage(atten_image_filename,
 						  forw_projector_ptr));
-  
+
   if (
       normalisation_ptr->set_up(template_proj_data_ptr->get_exam_info_sptr(), template_proj_data_ptr->get_proj_data_info_sptr()->create_shared_clone())
       != Succeeded::yes)
@@ -166,7 +175,7 @@ main (int argc, char * argv[])
   else
     {
       normalisation_ptr->undo(*out_proj_data_ptr,start_frame,end_frame, symmetries_sptr);
-    }    
+    }
 
   return EXIT_SUCCESS;
 }
