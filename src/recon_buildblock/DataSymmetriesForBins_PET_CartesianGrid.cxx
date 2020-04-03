@@ -314,7 +314,7 @@ DataSymmetriesForBins_PET_CartesianGrid
   //Block implementation
   if (proj_data_info_ptr->get_scanner_ptr()->get_scanner_geometry()=="BlocksOnCylindrical")
   {
-    if (dynamic_cast<ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get()) == NULL)
+    if(is_null_ptr(dynamic_cast<const ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get())))
       error("DataSymmetriesForBins_PET_CartesianGrid constructed with wrong type of ProjDataInfo: %s\n"
             "(can only handle projection data corresponding to blocks on a cylinder)\n",
             typeid(*proj_data_info_ptr).name());

@@ -118,8 +118,8 @@ find_transform_z(
     //block implementaion
     if (proj_data_info_ptr->get_scanner_ptr()->get_scanner_geometry()=="BlocksOnCylindrical")
       {
-  ProjDataInfoBlocksOnCylindrical* proj_data_info_blk_ptr =
-      static_cast<ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get());
+    const ProjDataInfoBlocksOnCylindrical* proj_data_info_blk_ptr =
+      static_cast<const ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get());
 
     const float delta = proj_data_info_blk_ptr->get_average_ring_difference(segment_num);
 
@@ -478,7 +478,6 @@ find_basic_bin(int &segment_num, int &view_num, int &axial_pos_num, int &tangent
   if ( do_symmetry_swap_s && tangential_pos_num < 0      )  { tangential_pos_num   = - tangential_pos_num ; change=true;};
   if ( do_symmetry_shift_z && axial_pos_num != 0    )  { axial_pos_num  =  0;     change = true; }
 
-  return change;
     }
 
   //block implementaion
@@ -496,8 +495,8 @@ find_basic_bin(int &segment_num, int &view_num, int &axial_pos_num, int &tangent
       if ax_pos_inc == 1
     ax_pos_num = (ring1 + ring2 - seg_num)/2
     */
-    ProjDataInfoBlocksOnCylindrical* proj_data_info_blk_ptr =
-      static_cast<ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get());
+    const ProjDataInfoBlocksOnCylindrical* proj_data_info_blk_ptr =
+      static_cast<const ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get());
     if (do_symmetry_shift_z)
     {
       int ring1, ring2;
@@ -640,8 +639,8 @@ num_related_bins(const Bin& b) const
   //block implementaion
   if (proj_data_info_ptr->get_scanner_ptr()->get_scanner_geometry()=="BlocksOnCylindrical")
 {
-    ProjDataInfoBlocksOnCylindrical* proj_data_info_blk_ptr =
-      static_cast<ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get());
+    const ProjDataInfoBlocksOnCylindrical* proj_data_info_blk_ptr =
+      static_cast<const ProjDataInfoBlocksOnCylindrical *>(proj_data_info_ptr.get());
     if (do_symmetry_shift_z)
     {
       int ring1, ring2;
