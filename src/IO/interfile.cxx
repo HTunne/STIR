@@ -1445,8 +1445,8 @@ write_basic_interfile_PDFS_header(const string& header_file_name,
   else
     {
       // !author Parisa Khateri
-      const shared_ptr<const ProjDataInfoCylindrical> proj_data_info_sptr =
-        dynamic_pointer_cast<const ProjDataInfoCylindrical>(pdfs.get_proj_data_info_sptr());
+      const shared_ptr<const ProjDataInfoBlocksOnCylindrical> proj_data_info_sptr =
+        dynamic_pointer_cast<const ProjDataInfoBlocksOnCylindrical>(pdfs.get_proj_data_info_sptr());
 
       if (!is_null_ptr(proj_data_info_sptr))
       {
